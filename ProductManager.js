@@ -58,6 +58,21 @@ class ProductManager {
     }
   }
 
+  async deleteProduct(id) {
+    try {
+      const products = await this.readProductsFromFile();
+      const productIndex = products.findIndex((product) => product.id === id);
+      if (productIndex === -1) {
+        return false; // Product not found
+      }
+      products.splice(productIndex, 1); // Remove the product at the found index
+      await this.writeProductsToFile(products);
+      return true; // Product deleted successfully
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async readProductsFromFile() {
     try {
       const data = await fs.promises.readFile(this.path, 'utf8');
@@ -134,3 +149,16 @@ productManager.getProductById(1)
   .catch((error) => {
     console.error('Error getting product by ID:', error.message);
   });
+
+  // Delete a product by ID
+productManager.deleteProduct(1)
+.then((isDeleted) => {
+  if (isDeleted) {
+    console.log('Product deleted successfully');
+  } else {
+    console.log('Product not found');
+  }
+})
+.catch((error) => {
+  console.error('Error deleting product:', error.message);
+});
