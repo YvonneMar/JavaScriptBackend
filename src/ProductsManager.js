@@ -1,10 +1,10 @@
-const fs = require('fs');
+import { promises } from 'fs';
 
 class ProductManager {
   constructor(filePath) {
     this.path = filePath;
   }
-
+  
   async addProduct(productData) {
     try {
       const products = await this.readProductsFromFile();
@@ -19,7 +19,7 @@ class ProductManager {
       throw error;
     }
   }
-
+  
   async getProducts() {
     try {
       const products = await this.readProductsFromFile();
@@ -28,7 +28,7 @@ class ProductManager {
       throw error;
     }
   }
-
+  
   async getProductById(id) {
     try {
       const products = await this.readProductsFromFile();
@@ -41,7 +41,7 @@ class ProductManager {
       throw error;
     }
   }
-
+  
   async updateProduct(id, updatedFields) {
     try {
       const products = await this.readProductsFromFile();
@@ -57,7 +57,7 @@ class ProductManager {
       throw error;
     }
   }
-
+  
   async deleteProduct(id) {
     try {
       const products = await this.readProductsFromFile();
@@ -72,10 +72,10 @@ class ProductManager {
       throw error;
     }
   }
-
+  
   async readProductsFromFile() {
     try {
-      const data = await fs.promises.readFile(this.path, 'utf8');
+      const data = await promises.readFile(this.path, 'utf8');
       return JSON.parse(data);
     } catch (error) {
       if (error.code === 'ENOENT') {
@@ -85,17 +85,19 @@ class ProductManager {
       throw error;
     }
   }
-
+  
   async writeProductsToFile(products) {
     try {
-      await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
+      await promises.writeFile(this.path, JSON.stringify(products, null, 2));
     } catch (error) {
       throw error;
     }
   }
-
+  
   generateProductId(products) {
     const maxId = products.reduce((max, product) => (product.id > max ? product.id : max), 0);
     return maxId + 1;
   }
 }
+
+export const productsManager = new ProductManager('products.json');
