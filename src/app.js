@@ -31,7 +31,7 @@ app.get("/api/products", async (req, res) => {
 app.get("/api/products/:idProduct", async (req, res) => {
   const { idProduct } = req.params;
   try {
-    const product = await productsManager.getProductById(idProduct);
+    const product = await productsManager.getProductById(+idProduct);
     if (!product) {
       return res.status(400).json({ message: "Product not found with the id" });
     }
