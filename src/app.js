@@ -5,7 +5,7 @@ const app = express();
 // get all products
 app.get("/api/products", async (req, res) => {
   const {limit} = req.query
-  const products = await productsManager.getProducts(req.query);
+  const products = await productsManager.getProducts();
   try {
     if (limit) {
       const limitCount = parseInt(limit);
